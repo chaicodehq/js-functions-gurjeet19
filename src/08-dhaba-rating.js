@@ -46,16 +46,56 @@
  */
 export function createFilter(field, operator, value) {
   // Your code here
+   return (obj) => {
+    if (!obj || !(field in obj)) return false;
+
+    switch (operator) {
+      case ">":
+        return obj[field] > value;
+      case "<":
+        return obj[field] < value;
+      case ">=":
+        return obj[field] >= value;
+      case "<=":
+        return obj[field] <= value;
+      case "===":
+        return obj[field] === value;
+      default:
+        return false;
+    }
+  };
 }
 
 export function createSorter(field, order = "asc") {
   // Your code here
+   return (a, b) => {
+    if (a[field] < b[field]) return order === "asc" ? -1 : 1;
+    if (a[field] > b[field]) return order === "asc" ? 1 : -1;
+    return 0;
+  };
 }
 
 export function createMapper(fields) {
   // Your code here
+  return (obj) => {
+    let result = {};
+
+    for (let field of fields) {
+      if (field in obj) {
+        result[field] = obj[field];
+      }
+    }
+
+    return result;
+  };
 }
 
 export function applyOperations(data, ...operations) {
   // Your code here
+   if (!Array.isArray(data)) return [];
+  let result = data;
+  for (let op of operations) {
+    result = op(result);
+  }
+  return result;
 }
