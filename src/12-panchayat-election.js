@@ -187,13 +187,18 @@ export function countVotesInRegions(regionTree) {
 
 export function tallyPure(currentTally, candidateId) {
   // Your code here
-  const newTally = { ...currentTally };
+  const base =
+    currentTally && typeof currentTally === "object"
+      ? currentTally
+      : {};
+
+  const newTally = { ...base };
 
   if (candidateId in newTally) {
-    newTally[candidateId] += 1;
+    newTally[candidateId] = newTally[candidateId] + 1;
   } else {
     newTally[candidateId] = 1;
   }
 
-  // return newTally;
+  return newTally;
 }
